@@ -1,4 +1,4 @@
-# 엔드포인트 매트릭스 (정답지)
+# 엔드포인트 매트릭스 
 
 Code Base Integration(코드 기반)과 API Discovery(트래픽 기반)를 대조했을 때 나와야 하는 분류입니다.
 
