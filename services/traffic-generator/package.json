@@ -1,0 +1,13 @@
+{
+  "name": "banking-traffic-generator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Synthetic traffic driver for the banking demo API, targeting an F5 XC HTTP Load Balancer FQDN",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}

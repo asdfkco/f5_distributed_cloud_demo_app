@@ -1,0 +1,38 @@
+services:
+  api:
+    build: ./services/api
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      NODE_ENV: ${NODE_ENV:-production}
+      JWT_SECRET: ${JWT_SECRET:-demo-only-change-me-1234567890}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-15m}
+      REFRESH_TOKEN_EXPIRES_IN: ${REFRESH_TOKEN_EXPIRES_IN:-7d}
+      RUNTIME_ROUTES_FILE: /runtime/shadow-routes.json
+      FEATURE_LOANS_ENABLED: ${FEATURE_LOANS_ENABLED:-false}
+      DEMO_ALICE_PASSWORD: ${DEMO_ALICE_PASSWORD:-Demo!Passw0rd-Alice1}
+      DEMO_BOB_PASSWORD: ${DEMO_BOB_PASSWORD:-Demo!Passw0rd-Bob2}
+      DEMO_CAROL_PASSWORD: ${DEMO_CAROL_PASSWORD:-Demo!Passw0rd-Carol3}
+    volumes:
+      # deploy/runtime is .gitignore'd -- it exists only on the deploy VM /
+      # local dev machine, never in the git tree. Mount read-only; absence of
+      # this directory/file is handled gracefully by the dynamic loader.
+      - ./deploy/runtime:/runtime:ro
+
+  traffic:
+    build: ./services/traffic-generator
+    environment:
+      TARGET_BASE_URL: ${TARGET_BASE_URL}
+      REQUESTS_PER_MINUTE: ${REQUESTS_PER_MINUTE:-6}
+      DURATION_HOURS: ${DURATION_HOURS:-4}
+      SHADOW_ROUTES_FILE: /runtime/shadow-routes.json
+      DEMO_ALICE_PASSWORD: ${DEMO_ALICE_PASSWORD:-Demo!Passw0rd-Alice1}
+      DEMO_BOB_PASSWORD: ${DEMO_BOB_PASSWORD:-Demo!Passw0rd-Bob2}
+      DEMO_CAROL_PASSWORD: ${DEMO_CAROL_PASSWORD:-Demo!Passw0rd-Carol3}
+    volumes:
+      # Same untracked runtime directory, mounted here too so the
+      # traffic-generator can occasionally call Shadow endpoints without ever
+      # hardcoding a shadow path string in git-tracked source.
+      - ./deploy/runtime:/runtime:ro
+    profiles: ["traffic"]
