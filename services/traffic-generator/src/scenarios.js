@@ -27,6 +27,9 @@ const commonEndpoints = [
   { name: 'getTransfer', method: 'GET', path: '/api/v1/transfers/:transferId', weight: 3, auth: true },
   { name: 'listCards', method: 'GET', path: '/api/v1/cards', weight: 5, auth: true },
   { name: 'blockCard', method: 'POST', path: '/api/v1/cards/:cardId/block', weight: 1, auth: true },
+  // blockCard와 짝을 맞춘다. 없으면 시간이 지날수록 카드가 전부 정지 상태로
+  // 남아 UI 화면이 죽는다.
+  { name: 'reissueCard', method: 'POST', path: '/api/v1/cards/:cardId/reissue', weight: 1, auth: true },
 ];
 
 module.exports = { commonEndpoints };

@@ -4,13 +4,13 @@ Code Base Integration(코드 기반)과 API Discovery(트래픽 기반)를 대�
 
 | 버킷 | 의미 | 개수 |
 |---|---|---|
-| Common | 코드에도 있고 트래픽도 있음 | 11 |
+| Common | 코드에도 있고 트래픽도 있음 | 12 |
 | Code-only | 코드에만 있고 트래픽 없음 | 6 |
 | Traffic-only (Shadow) | 트래픽만 있고 코드에 없음 | 6 |
 
-코드 스캔은 17개(Common + Code-only), 트래픽 discovery는 17개(Common + Shadow)를 잡아야 합니다. Shadow는 코드 쪽 목록에 절대 나오면 안 됩니다.
+코드 스캔은 18개(Common + Code-only), 트래픽 discovery는 18개(Common + Shadow)를 잡아야 합니다. Shadow는 코드 쪽 목록에 절대 나오면 안 됩니다.
 
-## A. Common (11)
+## A. Common (12)
 
 정적 라우트 파일에 정의되어 있고 traffic-generator가 반복 호출합니다.
 
@@ -26,6 +26,7 @@ Code Base Integration(코드 기반)과 API Discovery(트래픽 기반)를 대�
 | GET | `/api/v1/transfers/{transferId}` |
 | GET | `/api/v1/cards` |
 | POST | `/api/v1/cards/{cardId}/block` |
+| POST | `/api/v1/cards/{cardId}/reissue` |
 | GET | `/healthz` |
 
 ## B. Code-only (6)

@@ -19,7 +19,7 @@
 
 XC Console → API Management → Code Base Integration 결과를 엽니다.
 
-엔드포인트 개수가 17개(Common + Code-only)로 잡히는 걸 짚습니다. 그다음 Code-only 쪽을 봅니다. legacy v0 라우트, 안 쓰는 beneficiaries, 콜센터 전용 카드 삭제, 미출시 statements, 피처 플래그로 꺼둔 대출 신청.
+엔드포인트 개수가 18개(Common + Code-only)로 잡히는 걸 짚습니다. 그다음 Code-only 쪽을 봅니다. legacy v0 라우트, 안 쓰는 beneficiaries, 콜센터 전용 카드 삭제, 미출시 statements, 피처 플래그로 꺼둔 대출 신청.
 
 > 이것들은 소스에서 정상적으로 등록되고, 실제로 도달 가능하고, 스캔에도 잡힙니다. 그런데 아무도 호출하지 않습니다. 조용히 공격면으로만 남아 있는 코드죠.
 
@@ -35,7 +35,7 @@ XC Console → API Endpoints의 트래픽 기반 화면을 엽니다.
 
 ## 4. 버킷 대조 (2분)
 
-classification 화면을 띄우고 Common / Code-only / Traffic-only를 나란히 보여줍니다. 11 / 6 / 6이 매트릭스와 맞는지 확인합니다.
+classification 화면을 띄우고 Common / Code-only / Traffic-only를 나란히 보여줍니다. 12 / 6 / 6이 매트릭스와 맞는지 확인합니다.
 
 ## 5. Sensitive Data Discovery (2분)
 

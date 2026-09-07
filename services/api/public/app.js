@@ -189,9 +189,9 @@ async function loadCards() {
       `<div class="type" style="color:#8fa3ba;font-size:11px">${c.brand} · ${c.expiry}</div></div>` +
       `<div style="display:flex;align-items:center;gap:10px">` +
       `<span class="badge ${c.status}">${c.status === 'ACTIVE' ? '정상' : '정지'}</span></div>`;
+    const btn = document.createElement('button');
+    btn.className = 'ghost sm';
     if (c.status === 'ACTIVE') {
-      const btn = document.createElement('button');
-      btn.className = 'ghost sm';
       btn.textContent = '분실신고';
       btn.addEventListener('click', async () => {
         btn.disabled = true;
@@ -204,8 +204,21 @@ async function loadCards() {
           btn.disabled = false;
         }
       });
-      el.lastChild.appendChild(btn);
+    } else {
+      btn.textContent = '재발급';
+      btn.addEventListener('click', async () => {
+        btn.disabled = true;
+        try {
+          const d = await api('POST', `/api/v1/cards/${c.id}/reissue`);
+          toast(`재발급 완료 · ${d.card.maskedPan}`);
+          await loadCards();
+        } catch (e) {
+          toast(e.message, true);
+          btn.disabled = false;
+        }
+      });
     }
+    el.lastChild.appendChild(btn);
     box.appendChild(el);
   });
 }
