@@ -75,16 +75,20 @@ const cards = [
 
 const transactions = [];
 let txCounter = 1;
-const descriptions = ['Grocery store', 'Coffee shop', 'Salary deposit', 'Utility bill', 'Online shopping', 'ATM withdrawal', 'Subscription'];
+// 입금(CREDIT)과 출금(DEBIT)에 각각 어울리는 적요를 쓴다.
+// 뒤섞으면 UI 거래내역에 "커피값 입금" 같은 항목이 뜬다.
+const creditDescriptions = ['급여 입금', '이자 지급', '계좌 이체 입금'];
+const debitDescriptions = ['편의점', '카페', '공과금 자동이체', '온라인 쇼핑', 'ATM 출금', '구독 결제'];
 for (const account of accounts) {
   for (let i = 0; i < 5; i += 1) {
     const isCredit = i % 3 === 0;
+    const pool = isCredit ? creditDescriptions : debitDescriptions;
     transactions.push({
       id: `txn_${String(txCounter).padStart(4, '0')}`,
       accountId: account.id,
       type: isCredit ? 'CREDIT' : 'DEBIT',
       amount: 1000 * (5 + ((txCounter * 37) % 95)),
-      description: descriptions[txCounter % descriptions.length],
+      description: pool[txCounter % pool.length],
       createdAt: new Date(Date.now() - txCounter * 6 * 3600 * 1000).toISOString(),
     });
     txCounter += 1;

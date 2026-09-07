@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 
@@ -17,6 +18,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(requestLogger);
+
+// 데모 UI. Common 엔드포인트만 호출한다. public/app.js 상단 주석 참고.
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.get('/healthz', (req, res) => res.json({ status: 'ok', service: 'banking-api', time: new Date().toISOString() }));
 

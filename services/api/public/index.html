@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meridian Bank</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<!-- ================= 로그인 ================= -->
+<section id="login-view">
+  <div class="card">
+    <h1>Meridian <span style="color:#2f7fe0">Bank</span></h1>
+    <p class="sub">데모용 인터넷뱅킹. 모든 데이터는 합성 데이터입니다.</p>
+
+    <label for="username">아이디</label>
+    <select id="username">
+      <option value="alice">alice (Alice Kim)</option>
+      <option value="bob">bob (Bob Park)</option>
+      <option value="carol">carol (Carol Lee)</option>
+    </select>
+
+    <label for="password">비밀번호</label>
+    <input id="password" type="password" value="Demo!Passw0rd-Alice1">
+
+    <button id="btn-login" class="wide">로그인</button>
+    <div class="err-text" id="login-err"></div>
+  </div>
+</section>
+
+<!-- ================= 메인 ================= -->
+<div id="app-view" class="hidden">
+  <header>
+    <div class="brand">Meridian <span>Bank</span></div>
+    <div class="spacer"></div>
+    <div class="whoami" id="whoami"></div>
+    <button id="btn-logout" class="ghost sm">로그아웃</button>
+  </header>
+
+  <main>
+    <div class="grid cols-2">
+      <!-- 계좌 -->
+      <div class="card">
+        <h2>내 계좌</h2>
+        <div id="accounts"></div>
+      </div>
+
+      <!-- 이체 -->
+      <div class="card">
+        <h2>계좌 이체</h2>
+        <label for="tr-from">출금 계좌</label>
+        <select id="tr-from"></select>
+        <label for="tr-to">입금 계좌</label>
+        <select id="tr-to"></select>
+        <label for="tr-amt">금액 (KRW)</label>
+        <input id="tr-amt" type="number" value="10000" min="1">
+        <label for="tr-memo">메모</label>
+        <input id="tr-memo" type="text" placeholder="선택 입력">
+        <button id="btn-transfer" class="wide">이체하기</button>
+        <div class="err-text" id="tr-err"></div>
+      </div>
+    </div>
+
+    <!-- 거래내역 -->
+    <div class="card" style="margin-top:16px">
+      <h2>거래 내역 <span id="tx-acct" style="color:#8fa3ba;font-weight:400"></span></h2>
+      <div id="transactions"></div>
+    </div>
+
+    <div class="grid cols-2" style="margin-top:16px">
+      <!-- 카드 -->
+      <div class="card">
+        <h2>보유 카드</h2>
+        <div id="cards"></div>
+      </div>
+
+      <!-- API 호출 로그 -->
+      <div class="card">
+        <h2>API 호출 로그</h2>
+        <div id="api-log"></div>
+        <p style="color:#8fa3ba;font-size:12px;margin:10px 0 0">
+          이 화면의 모든 동작은 F5 XC HTTP LB를 통과하는 실제 API 호출입니다.
+        </p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>
