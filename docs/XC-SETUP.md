@@ -1,12 +1,12 @@
 # F5 Distributed Cloud 콘솔 설정
 
-전제: `banking-api`가 공인 IP VM에서 `:8080`으로 떠 있고, 그 VM에 `deploy/runtime/shadow-routes.json`을 직접 만들어 둔 상태여야 합니다. README의 VM 배포 섹션을 먼저 보세요.
+전제: `banking-api`가 공인 IP VM에서 `:8123`으로 떠 있고, 그 VM에 `deploy/runtime/shadow-routes.json`을 직접 만들어 둔 상태여야 합니다. README의 VM 배포 섹션을 먼저 보세요.
 
 ## 1. HTTP Load Balancer + Origin Pool
 
 1. Manage → Load Balancers → HTTP Load Balancers → Add HTTP Load Balancer
 2. LB에 쓸 도메인을 지정합니다. 직접 준비한 도메인이나 XC가 주는 도메인 둘 다 됩니다.
-3. Origin Pool에 VM 공인 IP, 포트 `8080`을 추가합니다.
+3. Origin Pool에 VM 공인 IP, 포트 `8123`을 추가합니다.
 4. TLS는 LB에서 종료시킵니다. XC 관리 인증서를 쓰면 편합니다.
 5. Other Settings에서 **API Discovery를 켭니다.** 이걸 빼먹으면 트래픽 쪽 인벤토리가 아예 안 생깁니다.
 6. 저장하고 publish.

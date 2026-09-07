@@ -46,7 +46,7 @@ traffic-generator도 같은 파일(`SHADOW_ROUTES_FILE`)을 읽습니다. 제너
 
 ```bash
 cp .env.example .env
-docker compose up api     # :8080
+docker compose up api     # 호스트 :8123 -> 컨테이너 :8080
 ```
 
 런타임 파일이 없으면 Shadow 경로 6개가 404입니다. 파일을 만들고 재시작하면 응답합니다.
@@ -54,7 +54,7 @@ docker compose up api     # :8080
 제너레이터를 로컬 API에 직접 붙여 스모크 테스트만 할 때:
 
 ```bash
-export TARGET_BASE_URL=http://localhost:8080
+export TARGET_BASE_URL=http://localhost:8123
 docker compose --profile traffic up traffic
 ```
 
@@ -70,12 +70,12 @@ cd services/traffic-generator && npm install && TARGET_BASE_URL=http://localhost
 
 ## VM 배포
 
-1. 공인 IP VM에서 인바운드 `:8080`을 엽니다. 리버스 프록시를 둬도 되고, XC origin pool이 `:8080`에 닿기만 하면 됩니다.
+1. 공인 IP VM에서 인바운드 `:8123`을 엽니다. compose가 호스트 `8123`을 컨테이너 `8080`에 매핑합니다. XC origin pool이 `:8123`에 닿기만 하면 되고, 리버스 프록시를 둬도 됩니다.
 2. 저장소를 clone합니다.
 3. VM에서 `deploy/runtime/shadow-routes.json`을 직접 만듭니다. 커밋하지 마세요.
 4. `.env.example`을 `.env`로 복사합니다.
 5. `docker compose up -d api`
-6. XC HTTP Load Balancer + Origin Pool(VM 공인 IP:8080)을 만들고 API Discovery를 켭니다. `docs/XC-SETUP.md` 참고.
+6. XC HTTP Load Balancer + Origin Pool(VM 공인 IP:8123)을 만들고 API Discovery를 켭니다. `docs/XC-SETUP.md` 참고.
 7. 이 GitHub 저장소로 Code Base Integration을 겁니다. 스캔에 최대 2시간 걸리니 미리 push해 두세요.
 8. LB FQDN이 살아나면 제너레이터를 그쪽으로 돌립니다.
    `TARGET_BASE_URL=<xc-lb-fqdn> docker compose --profile traffic up -d traffic`
@@ -89,11 +89,11 @@ cd services/traffic-generator && npm install && TARGET_BASE_URL=http://localhost
 # 1. 런타임 파일 없이 기동 -> Shadow 경로 전부 404
 rm -f deploy/runtime/shadow-routes.json
 docker compose up -d api
-curl -i http://localhost:8080/<shadow-경로>
+curl -i http://localhost:8123/<shadow-경로>
 
 # 2. 런타임 파일과 함께 기동 -> 전부 응답
 docker compose restart api
-curl -i http://localhost:8080/<shadow-경로>
+curl -i http://localhost:8123/<shadow-경로>
 
 # 3. 제일 중요. 추적 파일에 Shadow 경로 조각이 0건이어야 함.
 # <fragment>는 별도 보관 중인 정답지의 실제 경로 조각으로 채워서 실행하세요.
