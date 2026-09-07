@@ -16,9 +16,35 @@
 ## 2. Code Base Integration (GitHub)
 
 1. Manage → API Management → Code Base Integration
-2. Add Repository → GitHub 계정/조직 연결. 콘솔 안내에 따라 OAuth나 repo 읽기 권한 PAT를 씁니다.
+2. Add Repository → GitHub 계정/조직 연결. username과 PAT를 넣습니다.
 3. 저장소와 스캔할 브랜치(`main`)를 고릅니다.
 4. 스캔 시작. 첫 결과까지 최대 2시간쯤 걸립니다. **데모 하루 전에는 push와 스캔을 끝내두세요.**
+
+### 토큰 권한 (org 저장소를 쓸 때 주의)
+
+저장소가 org 소속이면 저장소 읽기 권한만으로는 부족하다. 콘솔이 org 목록을
+먼저 조회하는데, 토큰이 org를 못 보면 저장소 목록이 통째로 비어서 나온다.
+증상이 "저장소가 하나도 안 뜬다"로 나타나기 때문에 저장소 권한 문제로
+오해하기 쉽다.
+
+Fine-grained token:
+
+    Resource owner            org 이름 (개인 계정으로 두면 org 저장소가 안 보인다)
+    Repository permissions    Contents: Read-only, Metadata: Read-only
+    Organization permissions  Members: Read-only          <- 이게 빠지면 안 된다
+
+Classic token이면 `repo` + `read:org`.
+
+토큰이 제대로 되었는지는 아래로 확인한다. org 이름이 나와야 한다.
+빈 배열이면 Members 권한이 없는 것이다.
+
+```bash
+curl -s -H "Authorization: Bearer $TOKEN" https://api.github.com/user/orgs
+```
+
+권한을 고쳤는데도 목록이 비어 있으면 **연동을 지우고 새로 만든다.** 콘솔은
+연동 생성 시점의 org 목록을 들고 있어서, 토큰 권한만 나중에 고치면 반영되지
+않는다.
 
 ## 3. 트래픽 발생
 
