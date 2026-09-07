@@ -20,11 +20,12 @@ router.post('/:cardId/block', requireAuth, (req, res) => {
   return res.json({ card: { id: card.id, status: card.status } });
 });
 
-// CODE-ONLY (see docs/ENDPOINT-MATRIX.md section B):
-// Card cancellation is normally a call-center-only operation, not exposed in
-// the customer-facing app. The route is defined and fully reachable, but the
-// traffic-generator intentionally never calls it -- this is one of the six
-// "code, no traffic" endpoints for the demo.
+// CODE-ONLY (docs/ENDPOINT-MATRIX.md B 섹션 참고):
+// 카드 해지(취소)는 일반적으로 콜센터 전용 업무이며, 고객용 앱에는
+// 노출되지 않는다. 이 라우트는 정의되어 있고 완전히 도달 가능하지만,
+// traffic-generator는 의도적으로 이 엔드포인트를 절대 호출하지 않는다 
+// 이는 데모에서 사용하는 "코드는 있지만 트래픽은 없는" 6개 엔드포인트 중
+// 하나이다.
 router.delete('/:cardId', requireAuth, (req, res) => {
   const idx = cards.findIndex((c) => c.id === req.params.cardId && c.userId === req.user.id);
   if (idx === -1) return res.status(404).json({ error: 'not_found' });

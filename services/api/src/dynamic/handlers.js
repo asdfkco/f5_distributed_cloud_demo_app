@@ -1,8 +1,7 @@
-// Handler registry for runtime-loaded (Shadow) routes. Keyed by name only --
-// this file intentionally contains NO endpoint path strings anywhere. The
-// actual paths live exclusively in the untracked
-// deploy/runtime/shadow-routes.json (see ../dynamic/loader.js and
-// deploy/shadow-routes.example.json for the harmless placeholder schema).
+// Shadow 라우트 핸들러 레지스트리. 이름만 키로 쓴다.
+// 이 파일에는 엔드포인트 경로 문자열이 일부러 하나도 없다.
+// 실제 경로는 git에 추적되지 않는 deploy/runtime/shadow-routes.json에만
+// 존재한다. 파일 형식은 deploy/shadow-routes.example.json 참고.
 const { users, accounts, cards } = require('../data/seed');
 
 function adminUsersDump(req, res) {

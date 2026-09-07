@@ -1,16 +1,16 @@
-// Dynamic route loader -- registers Shadow routes at runtime so that no
-// Shadow endpoint path string ever needs to appear in git-tracked source.
+// Shadow 라우트를 런타임에 등록하는 로더.
+// 목적은 하나다. Shadow 엔드포인트의 경로 문자열이 git에 올라가는 소스에
+// 절대 남지 않게 하는 것.
 //
-// Reads process.env.RUNTIME_ROUTES_FILE (a JSON file with a `routes` array
-// of { method, path, handler, auth }), looks up each handler by name in
-// ./handlers.js, and registers it via computed member access
-// (app[method](path, handler)) so static/source analysis cannot resolve the
-// path strings from this file alone -- they only exist in the untracked
-// runtime file.
+// RUNTIME_ROUTES_FILE이 가리키는 JSON을 읽는다. `routes` 배열에
+// { method, path, handler, auth } 형태로 들어있다. handler 이름을
+// ./handlers.js에서 찾은 뒤 app[method](path, handler)로 등록한다.
+// 메서드명이 변수라 정적 분석으로는 풀리지 않고, 경로 문자열은 애초에
+// 이 파일에 없다. 실제 경로는 git에 추적되지 않는 런타임 파일에만 있다.
 //
-// Must be mounted AFTER all static route files and BEFORE the 404 handler.
-// If the env var is unset or the file does not exist, this is a silent
-// no-op and the app boots normally serving only Common + Code-only routes.
+// 정적 라우트 전부 뒤, 404 핸들러 앞에 마운트해야 한다.
+// 환경 변수가 없거나 파일이 없으면 아무것도 하지 않고 넘어간다.
+// 이때 앱은 Common + Code-only만 서비스하면서 정상 기동한다.
 const fs = require('fs');
 const path = require('path');
 const handlers = require('./handlers');

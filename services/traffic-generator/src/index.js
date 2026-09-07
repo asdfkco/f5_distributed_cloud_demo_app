@@ -6,8 +6,9 @@ const { commonEndpoints } = require('./scenarios');
 const BASE_URL = process.env.TARGET_BASE_URL;
 const RPM = Number(process.env.REQUESTS_PER_MINUTE || 6);
 const DURATION_HOURS = Number(process.env.DURATION_HOURS || 4);
-// Same file the API's dynamic loader reads; either env name works so
-// docker-compose can reuse one mount for both services.
+// API의 dynamic loader가 읽는 것과 동일한 파일이다; 두 env 이름 중
+// 어느 쪽을 써도 동작하므로, docker-compose가 두 서비스에 대해 하나의
+// 마운트를 재사용할 수 있다.
 const SHADOW_ROUTES_FILE = process.env.SHADOW_ROUTES_FILE || process.env.RUNTIME_ROUTES_FILE;
 
 if (!BASE_URL) {
@@ -15,16 +16,16 @@ if (!BASE_URL) {
   process.exit(1);
 }
 
-// Demo users (synthetic). Passwords are shared with the API's seed data via
-// the same env vars so login succeeds against whatever DEMO_*_PASSWORD the
-// API was started with.
+// 데모용 사용자(가상). 비밀번호는 API의 시드 데이터와 동일한 환경 변수를
+// 통해 공유되므로, API가 어떤 DEMO_*_PASSWORD로 시작되었든 로그인이
+// 성공한다.
 const demoUsers = [
   { username: 'alice', password: process.env.DEMO_ALICE_PASSWORD || '' },
   { username: 'bob', password: process.env.DEMO_BOB_PASSWORD || '' },
   { username: 'carol', password: process.env.DEMO_CAROL_PASSWORD || '' },
 ];
 
-// sessions[username] = { accessToken, refreshToken, accountIds, cardId, transferId }
+// sessions[username] = { accessToken, refreshToken, accountIds, cardId, transferId } 형태의 세션 저장소
 const sessions = {};
 
 function loadShadowEndpoints() {
@@ -150,7 +151,7 @@ async function callEndpoint(ep, actorUsername, session) {
     console.log(`${new Date().toISOString()} actor=${actorUsername} ${ep.shadow ? 'SHADOW' : 'common'} ${ep.method} ${ep.path} -> ${res.status}`);
 
     if (res.status === 401 && ep.auth) {
-      // Token likely expired -- force a fresh login next tick.
+      // 토큰이 만료되었을 가능성이 높음, 다음 tick에서 강제로 다시 로그인.
       delete sessions[actorUsername];
       return;
     }
@@ -177,8 +178,9 @@ async function main() {
   const shadowEndpoints = loadShadowEndpoints();
   const allEndpoints = [...commonEndpoints, ...shadowEndpoints];
 
-  // Prime sessions for every demo user so cross-user BOLA probes and shadow
-  // calls have real account ids to work with from the start.
+  // 모든 데모 사용자에 대해 세션을 미리 준비해 두어, cross-user BOLA
+  // probe와 shadow 호출이 처음부터 실제 계좌 id를 갖고 동작할 수 있도록
+  // 한다.
   for (const demoUser of demoUsers) {
     if (demoUser.password) await ensureSession(demoUser);
   }

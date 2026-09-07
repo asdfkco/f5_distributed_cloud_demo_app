@@ -1,14 +1,13 @@
 const jwt = require('jsonwebtoken');
 
-// Demo-only secret. In this repo it is always overridden by the JWT_SECRET
-// env var (see .env.example); the fallback exists only so the app can boot
-// in a pinch during local hacking.
+// 데모 전용 시크릿. 실제로는 JWT_SECRET 환경 변수로 덮어쓴다(.env.example).
+// 이 fallback은 로컬에서 환경 변수 없이도 앱이 뜨게 하려고 남겨둔 값이다.
 const JWT_SECRET = process.env.JWT_SECRET || 'demo-only-change-me-1234567890';
 
 /**
- * Applied to Common and Code-only routes. Most Shadow (runtime-loaded)
- * routes intentionally do NOT use this middleware -- that is the point of
- * the demo (see src/dynamic/loader.js and deploy/shadow-routes.example.json).
+ * Common과 Code-only 라우트에 적용한다.
+ * Shadow 라우트는 대부분 이 미들웨어를 일부러 안 붙인다. 인증 없이 뚫려
+ * 있다는 게 이 데모에서 보여주려는 위험이다. src/dynamic/loader.js 참고.
  */
 function requireAuth(req, res, next) {
   const header = req.headers.authorization || '';

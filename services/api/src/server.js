@@ -20,8 +20,8 @@ app.use(requestLogger);
 
 app.get('/healthz', (req, res) => res.json({ status: 'ok', service: 'banking-api', time: new Date().toISOString() }));
 
-// --- Static routes: these are what the F5 XC Code Base Integration scanner
-// should find in source (Common + Code-only). ---
+// - 정적 라우트: F5 XC Code Base Integration 스캐너가 소스코드에서
+// 찾아내야 할 대상이다 (Common + Code-only). -
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', usersRoutes);
 app.use('/api/v1/accounts', accountsRoutes);
@@ -30,8 +30,8 @@ app.use('/api/v1/cards', cardsRoutes);
 app.use(legacyRoutes);
 app.use(unreleasedRoutes);
 
-// --- Dynamic (Shadow) routes: mounted AFTER static routes, BEFORE the 404
-// handler. Skips gracefully when the runtime file is absent. ---
+// Shadow 라우트는 정적 라우트 뒤, 404 핸들러 앞에 마운트한다.
+// 런타임 파일이 없으면 조용히 건너뛴다.
 loadDynamicRoutes(app);
 
 app.use((req, res) => {

@@ -1,11 +1,11 @@
-// Code-only (see docs/ENDPOINT-MATRIX.md section B):
+// Code-only (docs/ENDPOINT-MATRIX.md B 섹션 참고):
 // GET  /api/v0/legacy/accounts/{id}
 // POST /api/v0/legacy/wire-transfer
 //
-// These routes are defined with full paths here (mounted at the app root)
-// because they believed to have been retired ~2 years ago -- but the route
-// handlers were never removed. The traffic-generator intentionally never
-// calls these.
+// 이 라우트들은 여기에서 전체 경로로(app root에 마운트되어) 정의되어
+// 있다. 약 2년 전에 폐기(retire)되었다고 알려져 있었지만, 라우트 핸들러는
+// 실제로는 한 번도 제거된 적이 없기 때문이다. traffic-generator는
+// 의도적으로 이 엔드포인트들을 절대 호출하지 않는다.
 const express = require('express');
 const { requireAuth } = require('../middleware/auth');
 const { accounts } = require('../data/seed');

@@ -11,12 +11,12 @@ router.get('/', requireAuth, (req, res) => {
   return res.json({ accounts: list });
 });
 
-// SECURITY DEMO NOTE -- INTENTIONAL, DO NOT "FIX":
-// This endpoint deliberately does NOT verify that req.user owns `accountId`.
-// Any authenticated user's token can fetch ANY account by id. This is a
-// deliberate BOLA/IDOR finding for the F5 XC API security demo (paired with
-// a cross-user probe in the traffic-generator). Adding an ownership check
-// here would remove the vulnerability the demo is built to showcase.
+// 보안 데모 참고사항, 의도된 것이므로 "고치지" 말 것:
+// 이 엔드포인트는 의도적으로 req.user가 `accountId`의 소유자인지 검증하지
+// 않는다. 인증된 사용자라면 누구의 토큰으로든 어떤 계좌든 id로 조회할 수
+// 있다. 이는 F5 XC API security 데모를 위한 의도적인 BOLA/IDOR 취약점이다
+// (traffic-generator의 cross-user probe와 짝을 이룬다). 여기에 소유권
+// 검사를 추가하면 이 데모가 보여주고자 하는 취약점 자체가 사라진다.
 router.get('/:accountId', requireAuth, (req, res) => {
   const account = accounts.find((a) => a.id === req.params.accountId);
   if (!account) return res.status(404).json({ error: 'not_found' });

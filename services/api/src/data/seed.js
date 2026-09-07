@@ -1,14 +1,13 @@
-// In-memory synthetic seed data for the banking demo. No database.
+// 뱅킹 데모용 인메모리 가상 시드 데이터. 데이터베이스는 사용하지 않는다.
 //
-// All identifiers are fake:
-// - Card numbers use reserved test PANs (4111 1111 1111 1111 etc.) that
-//   networks reserve for testing and never issue to real cardholders.
-// - "RRN" values are formatted like a Korean resident registration number
-//   (YYMMDD-XSSSSSS) but are randomly generated digits with NO connection to
-//   any real person -- purely to demonstrate XC's Sensitive Data Discovery
-//   pattern matching via the runtime-only PII-export handler (see
-//   ../dynamic/handlers.js: metricsPiiExport).
-// - Emails use the reserved @example.com domain (RFC 2606).
+// 식별자는 전부 가짜다.
+// - 카드번호는 카드사가 테스트 용도로 예약해 놓고 실제 카드소지자에게는
+//   절대 발급하지 않는 예약된 테스트용 PAN(4111 1111 1111 1111 등)을
+//   사용한다.
+// - rrn은 주민등록번호 형식(YYMMDD-XSSSSSS)만 흉내낸 무작위 숫자로,
+//   실존 인물과 아무 관련이 없다. metricsPiiExport 핸들러로 흘려보내서
+//   XC Sensitive Data Discovery의 패턴 매칭을 시연하는 용도다.
+// - 이메일은 예약된 @example.com 도메인(RFC 2606)을 사용한다.
 const crypto = require('crypto');
 
 function hashPassword(password, salt = crypto.randomBytes(16).toString('hex')) {
@@ -36,7 +35,7 @@ const users = [
     username: 'alice',
     email: 'alice@example.com',
     displayName: 'Alice Kim',
-    rrn: '900101-1234567', // synthetic, format-only -- see file header
+    rrn: '900101-1234567', // 가상 데이터, 형식만 흉내낸 값 -- 파일 상단 주석 참고
     passwordHash: hashPassword(process.env.DEMO_ALICE_PASSWORD || 'Demo!Passw0rd-Alice1'),
   },
   {
@@ -66,7 +65,7 @@ const accounts = [
   { id: 'acc_carol_sav', userId: 'usr_carol', accountNumber: '110-456-789013', type: 'SAVINGS', balance: 450000, currency: 'KRW' },
 ];
 
-// Reserved test PANs -- never real card numbers.
+// 예약된 테스트용 PAN, 실제 카드번호가 아니다.
 const cards = [
   { id: 'card_alice_1', userId: 'usr_alice', pan: '4111111111111111', brand: 'VISA', status: 'ACTIVE', expiry: '12/29' },
   { id: 'card_bob_1', userId: 'usr_bob', pan: '5555555555554444', brand: 'MASTERCARD', status: 'ACTIVE', expiry: '08/28' },

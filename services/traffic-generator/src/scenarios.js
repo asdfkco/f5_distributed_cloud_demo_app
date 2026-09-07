@@ -1,32 +1,26 @@
-// Endpoint weights for the traffic-generator's request mix.
+// traffic-generator가 보낼 요청 비율(가중치).
 //
-// !!! DO NOT ADD CODE-ONLY PATHS HERE !!!
-// The 6 Code-only endpoints listed in docs/ENDPOINT-MATRIX.md section B
-// (the legacy v0 account/wire-transfer routes, the retired beneficiaries
-// listing, the call-center-only card delete, the unreleased statements
-// endpoint, and the feature-flagged loan application) must NEVER receive
-// traffic. Adding any of their paths to this file defeats the whole
-// "Code-only = dead code" demo bucket. A CI/lint step should grep this
-// directory against the path list in docs/ENDPOINT-MATRIX.md section B
-// before merging changes -- deliberately not repeated verbatim here so this
-// file itself can never accidentally match that grep.
+// !!! 여기에 CODE-ONLY 경로를 절대 추가하지 말 것 !!!
+// docs/ENDPOINT-MATRIX.md B 섹션의 Code-only 엔드포인트 6개는 트래픽을
+// 받으면 안 된다. 하나라도 여기 들어가면 "Code-only = 죽은 코드" 버킷이
+// 통째로 무너진다. merge 전에 이 디렉터리를 B 섹션 경로 목록과 대조해
+// grep하는 게 안전하다. 이 파일이 그 grep에 스스로 걸리면 곤란하므로
+// 여기에 경로를 다시 적어두지는 않았다.
 //
-// NOTE ON SHADOW ENDPOINTS: Shadow (traffic-only) endpoint paths are
-// intentionally NOT written anywhere in this file, or anywhere else in this
-// git-tracked repository. index.js loads them at runtime from the same
-// untracked runtime routes file the API's dynamic loader reads
+// Shadow 경로도 이 파일은 물론 저장소 어느 파일에도 적지 않는다.
+// index.js가 API 쪽 로더와 같은 런타임 파일에서 읽어온다
 // (SHADOW_ROUTES_FILE / RUNTIME_ROUTES_FILE -> deploy/runtime/shadow-routes.json,
-// which is .gitignore'd). If that file/env var is absent, this generator
-// simply sends Common traffic only -- it never hardcodes a Shadow path.
+// .gitignore 대상). 그 파일이 없으면 Common 트래픽만 보내고 끝이다.
 const commonEndpoints = [
   { name: 'login', method: 'POST', path: '/api/v1/auth/login', weight: 10, auth: false },
   { name: 'refresh', method: 'POST', path: '/api/v1/auth/refresh', weight: 3, auth: false },
   { name: 'me', method: 'GET', path: '/api/v1/users/me', weight: 8, auth: true },
   { name: 'listAccounts', method: 'GET', path: '/api/v1/accounts', weight: 10, auth: true },
   { name: 'getAccount', method: 'GET', path: '/api/v1/accounts/:accountId', weight: 8, auth: true },
-  // Occasional intentional cross-user probe: uses the current actor's token
-  // against a DIFFERENT user's account id, to generate real BOLA/IDOR
-  // traffic for the XC API security demo. Still just the same Common path.
+  // 의도적으로 이따금 섞어 넣는 cross-user probe: 현재 actor의 토큰을
+  // 다른(DIFFERENT) 사용자의 계좌 id에 대해 사용하여, XC API security
+  // 데모를 위한 실제 BOLA/IDOR 트래픽을 발생시킨다. 경로 자체는 여전히
+  // 동일한 Common 경로이다.
   { name: 'getAccountBola', method: 'GET', path: '/api/v1/accounts/:otherAccountId', weight: 1, auth: true },
   { name: 'getTransactions', method: 'GET', path: '/api/v1/accounts/:accountId/transactions', weight: 8, auth: true },
   { name: 'createTransfer', method: 'POST', path: '/api/v1/transfers', weight: 4, auth: true },
