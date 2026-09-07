@@ -2,7 +2,10 @@ services:
   api:
     build: ./services/api
     ports:
-      - "8123:8080"
+      # BIND_ADDR로 리스닝 인터페이스를 제한한다. 기본값 0.0.0.0은 모든
+      # 인터페이스에 노출되므로, 특정 IP에서만 받으려면 .env에 지정한다.
+      # 예: BIND_ADDR=172.16.61.26
+      - "${BIND_ADDR:-0.0.0.0}:${HOST_PORT:-8123}:8080"
     environment:
       PORT: 8080
       NODE_ENV: ${NODE_ENV:-production}
