@@ -66,11 +66,20 @@ const accounts = [
 ];
 
 // 예약된 테스트용 PAN, 실제 카드번호가 아니다.
+// 사용자마다 카드를 여러 장 준다. 한 장뿐이면 트래픽에 카드 ID가 한 종류만
+// 흘러서, XC가 경로 파라미터로 추론하지 못하고 실제 ID를 고정 문자열로
+// 학습해버린다(/api/v1/cards/card_alice_1/block 처럼). 그러면 코드 스캔이
+// 잡은 /api/v1/cards/{cardId}/block 과 매칭되지 않아 같은 엔드포인트가
+// 둘로 갈린다.
 const cards = [
   { id: 'card_alice_1', userId: 'usr_alice', pan: '4111111111111111', brand: 'VISA', status: 'ACTIVE', expiry: '12/29' },
+  { id: 'card_alice_2', userId: 'usr_alice', pan: '5105105105105100', brand: 'MASTERCARD', status: 'ACTIVE', expiry: '07/28' },
+  { id: 'card_alice_3', userId: 'usr_alice', pan: '4012888888881881', brand: 'VISA', status: 'ACTIVE', expiry: '02/30' },
   { id: 'card_bob_1', userId: 'usr_bob', pan: '5555555555554444', brand: 'MASTERCARD', status: 'ACTIVE', expiry: '08/28' },
+  { id: 'card_bob_2', userId: 'usr_bob', pan: '4222222222222', brand: 'VISA', status: 'ACTIVE', expiry: '05/29' },
   { id: 'card_carol_1', userId: 'usr_carol', pan: '4012888888881881', brand: 'VISA', status: 'ACTIVE', expiry: '03/27' },
   { id: 'card_carol_2', userId: 'usr_carol', pan: '378282246310005', brand: 'AMEX', status: 'ACTIVE', expiry: '11/26' },
+  { id: 'card_carol_3', userId: 'usr_carol', pan: '6011111111111117', brand: 'DISCOVER', status: 'ACTIVE', expiry: '09/31' },
 ].map((c) => ({ ...c, maskedPan: maskPan(c.pan) }));
 
 const transactions = [];

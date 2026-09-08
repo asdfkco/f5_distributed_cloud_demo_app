@@ -65,4 +65,12 @@ Manage → API Management → API Endpoints (콘솔 버전에 따라 이름이 �
 
 **Shadow가 트래픽 discovery에 안 뜨는 경우.** 제너레이터 컨테이너에 `deploy/runtime/shadow-routes.json`이 마운트됐는지, 로그에 `SHADOW` 라인이 실제로 찍히는지, 트래픽을 충분히 오래 돌렸는지 순서대로 확인합니다.
 
+**경로 파라미터가 `{DYN}`으로 안 잡히고 실제 값이 박혀 있는 경우.**
+`/api/v1/cards/card_alice_1/block` 처럼 나온다면, 그 자리에 흐른 값이 한
+종류뿐이라 XC가 파라미터로 추론하지 못한 것이다. 값이 여러 개 흘러야
+추론한다. 시드 데이터에서 해당 리소스를 사용자마다 여러 개 만들고,
+traffic-generator가 매번 다른 값을 고르게 한다. 이걸 방치하면 코드 스캔이
+잡은 `/api/v1/cards/{cardId}/block` 과 매칭되지 않아 같은 엔드포인트가
+Code-only 하나, 가짜 Traffic-only 하나로 갈린다.
+
 **개수가 안 맞는 경우.** README의 로컬 검증을 배포된 VM에서 XC를 거치지 않고 직접 돌려보세요. 앱 문제인지 XC discovery 문제인지 바로 갈립니다.

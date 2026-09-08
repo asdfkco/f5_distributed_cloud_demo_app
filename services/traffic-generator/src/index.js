@@ -25,7 +25,7 @@ const demoUsers = [
   { username: 'carol', password: process.env.DEMO_CAROL_PASSWORD || '' },
 ];
 
-// sessions[username] = { accessToken, refreshToken, accountIds, cardId, transferId } 형태의 세션 저장소
+// sessions[username] = { accessToken, refreshToken, accountIds, cardIds, transferId } 형태의 세션 저장소
 const sessions = {};
 
 function loadShadowEndpoints() {
@@ -68,7 +68,7 @@ async function loginUser(demoUser) {
     return null;
   }
   const body = await res.json();
-  const session = { accessToken: body.accessToken, refreshToken: body.refreshToken, accountIds: [], cardId: null, transferId: null };
+  const session = { accessToken: body.accessToken, refreshToken: body.refreshToken, accountIds: [], cardIds: [], transferId: null };
   const acctRes = await fetch(`${BASE_URL}/api/v1/accounts`, {
     headers: { Authorization: `Bearer ${session.accessToken}` },
   });
@@ -81,7 +81,7 @@ async function loginUser(demoUser) {
   });
   if (cardRes.ok) {
     const cardBody = await cardRes.json();
-    if (cardBody.cards && cardBody.cards.length) session.cardId = cardBody.cards[0].id;
+    session.cardIds = (cardBody.cards || []).map((c) => c.id);
   }
   sessions[demoUser.username] = session;
   return session;
@@ -102,11 +102,18 @@ function otherUsersAccountId(currentUsername) {
   return null;
 }
 
+// 경로 파라미터에는 매번 다른 값이 흘러야 한다. 같은 값만 반복하면 XC가
+// 그 값을 파라미터로 추론하지 못하고 고정 경로로 학습한다.
+function pickRandom(list) {
+  if (!list || !list.length) return null;
+  return list[Math.floor(Math.random() * list.length)];
+}
+
 function fillTemplate(templatePath, actorUsername, session) {
   return templatePath.replace(/:([A-Za-z0-9_]+)/g, (_, name) => {
-    if (name === 'accountId') return (session.accountIds && session.accountIds[0]) || 'sample-account';
-    if (name === 'otherAccountId') return otherUsersAccountId(actorUsername) || (session.accountIds && session.accountIds[0]) || 'sample-account';
-    if (name === 'cardId') return session.cardId || 'sample-card';
+    if (name === 'accountId') return pickRandom(session.accountIds) || 'sample-account';
+    if (name === 'otherAccountId') return otherUsersAccountId(actorUsername) || pickRandom(session.accountIds) || 'sample-account';
+    if (name === 'cardId') return pickRandom(session.cardIds) || 'sample-card';
     if (name === 'transferId') return session.transferId || 'sample-transfer';
     return 'sample';
   });

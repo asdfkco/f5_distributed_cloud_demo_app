@@ -12,6 +12,9 @@
 // (SHADOW_ROUTES_FILE / RUNTIME_ROUTES_FILE -> deploy/runtime/shadow-routes.json,
 // .gitignore 대상). 그 파일이 없으면 Common 트래픽만 보내고 끝이다.
 const commonEndpoints = [
+  // healthz도 Common이다. 여기 없으면 트래픽이 0이라 Code-only로 분류되어
+  // 버킷이 어긋난다.
+  { name: 'health', method: 'GET', path: '/healthz', weight: 4, auth: false },
   { name: 'login', method: 'POST', path: '/api/v1/auth/login', weight: 10, auth: false },
   { name: 'refresh', method: 'POST', path: '/api/v1/auth/refresh', weight: 3, auth: false },
   { name: 'me', method: 'GET', path: '/api/v1/users/me', weight: 8, auth: true },
