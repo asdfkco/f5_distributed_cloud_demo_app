@@ -1,7 +1,0 @@
-{
-  "_comment": "TEMPLATE ONLY. This file is committed to git and must never contain real shadow endpoint paths. Copy it to deploy/runtime/shadow-routes.json (which is .gitignore'd) and replace these placeholders with the real demo routes documented in docs/ENDPOINT-MATRIX.md section C.",
-  "routes": [
-    { "method": "GET", "path": "/example/placeholder/one", "handler": "examplePlaceholderOne", "auth": false },
-    { "method": "POST", "path": "/example/placeholder/two", "handler": "examplePlaceholderTwo", "auth": true }
-  ]
-}

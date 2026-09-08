@@ -1,17 +1,13 @@
 node_modules/
 npm-debug.log*
 
-# Runtime-only shadow route definitions. NEVER commit this directory.
-# See docs/ENDPOINT-MATRIX.md and README.md for why.
-deploy/runtime/
-
-# Local env files (demo secrets/passwords)
+# 로컬 환경 파일 (데모 비밀번호 포함)
 .env
 .env.*.local
 
 *.log
 .DS_Store
 
-# Local harness/tooling state (not part of this demo repo)
+# 로컬 도구 상태. 이 저장소의 일부가 아니다.
 .claude/
 .omx/
