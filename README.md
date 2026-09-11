@@ -3,6 +3,7 @@
 F5 Distributed Cloud의 Code Base Integration과 API Discovery를 대조해 Shadow API를 드러내는 데모용 Express 서버다. 합성 데이터만 사용하는 가상 은행 API로, 로그인·계좌·이체·카드 기능과 간단한 웹 UI를 제공한다.
 
 트래픽 생성기와 배포용 compose, 문서는 [f5_distributed_cloud_demo_harness](https://github.com/nginx-store/f5_distributed_cloud_demo_harness)에 있다. 이 저장소에는 **서버 코드만** 둔다. XC 코드 스캐너가 저장소 루트의 매니페스트로 언어와 프레임워크를 판별하기 때문이다.
+실행 진입점은 저장소 루트의 `package.json`과 `src/server.js`다.
 
 모든 데이터는 가짜다. 카드사가 테스트용으로 예약한 PAN, 형식만 맞춘 주민번호, `@example.com` 이메일만 쓴다. 실제 개인정보나 자격증명은 없다.
 
